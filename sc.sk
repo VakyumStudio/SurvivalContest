@@ -171,6 +171,14 @@ on rightclick with sponge:
 	set slot 16 of {_gui} to green wool named "&a Équipe Vert" with lore "&5 Cliquez pour rejoindre l'équipe !" 
 	open {_gui} to player
     
+on death of wither:
+	add 75 to {pts.%{team.%attacker%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 75 points à ta team !"  to attacker
+    
+on death of warden:
+	add 50 to {pts.%{team.%attacker%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 50 points à ta team !" to attacker
+    
 on join:
 	set join message to "&6&lSurvival Contest &r&8>> &a %player% à rejoint la partie !"
 	give player sponge named "&6Survival Contest"
@@ -178,5 +186,9 @@ on join:
 on leave:
 	set leave message to "&6&lSurvival Contest &r&8>> &a %player% à quitté la partie !"
     
+on death of player:
+	remove 10 from {pts.%{team.%victim%}%}
+	wait 4 ticks
+	send "&6&lSurvival Contest &r&8>> &cTu as fait perdre 10 points à ta team !"  to victim
 
     
