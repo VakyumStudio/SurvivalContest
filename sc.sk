@@ -1,0 +1,182 @@
+on mine of diamond ore:
+	add 5 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 5 points à ta team !"
+    
+on mine of gold ore:
+	add 4 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 4 points à ta team !"  
+    
+on mine of iron ore:
+	add 3 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 3 points à ta team !"
+   
+on mine of coal ore:
+	add 2 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 2 points à ta team !"
+    
+on mine of ancient debris:
+	add 10 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 10 points à ta team !"
+
+on mine of emerald ore:
+	add 7 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 7 points à ta team !"
+    
+on mine of lapis ore:
+	add 1 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 1 point à ta team !"
+    
+on mine of redstone ore:
+	add 1 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 1 point à ta team !"
+    
+on mine of deepslate diamond ore:
+	add 5 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 5 points à ta team !"
+    
+on mine of deepslate gold ore:
+	add 4 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 4 points à ta team !" 
+    
+on mine of deepslate iron ore:
+	add 3 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 3 points à ta team !"
+   
+on mine of deepslate coal ore:
+	add 2 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as gagné 2 pts !"
+    
+
+on mine of deepslate emerald ore:
+	add 7 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 7 points à ta team !"
+    
+on mine of deepslate lapis ore:
+	add 1 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 1 point à ta team !"
+    
+on mine of deepslate redstone ore:
+	add 1 to {pts.%{team.%player%}%}
+	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 1 point à ta team !"
+    
+#
+
+on portal:
+	if {pts.%{team.%player%}%} < 500:
+		cancel event
+        
+#
+
+command /gamestart:
+	trigger:
+		clear all players in world "world"'s inventory
+		clear all players in world "world_the_end"'s inventory
+		clear all players in world "world_nether"'s inventory
+		set {pts.%{team.all players}%} to 0
+		set all players in world "world"'s gamemode to survival
+		set {_x} to 0
+		set {_y} to 500
+		set {_z} to 0
+		apply resistance 255 to all players for 30 seconds
+		teleport all players to location at {_x}, {_y}, {_z}
+		give all players 10 bread
+        
+       
+    
+command /team [<string>] [<string>]:
+	trigger:
+		if arg 1 is not set:
+			send "&6&lSurvival Contest &r&8>> &aTu es dans l'équipe :%{team.%player%}%"
+		if arg 1 is "join":
+			if arg 2 is "Bleu":
+				set {team.%player%} to "Bleu"
+				send "&6&lSurvival Contest &r&8>> &1Vous avez rejoint les bleus !"
+			if arg 2 is "Rouge":
+				set {team.%player%} to "Rouge"
+				send "&6&lSurvival Contest &r&8>> &4Vous avez rejoint les rouges !"
+			if arg 2 is "Jaune":
+				set {team.%player%} to "Jaune"
+				send "&6&lSurvival Contest &r&8>> &eVous avez rejoint les jaunes !"
+			if arg 2 is "Vert":
+				set {team.%player%} to "Vert"
+				send "&6&lSurvival Contest &r&8>> &aVous avez rejoint les verts !"
+		if arg 1 is "pts":
+			send "&6&lSurvival Contest &r&8>> &aTa team possède %{pts.%{team.%player%}%}% points !"
+		player has permission "*":
+			if arg 1 is "reset":
+				set {pts.Bleu} to 0
+				set {pts.Rouge} to 0
+				set {pts.Vert} to 0
+				set {pts.Jaune} to 0
+				send "&6&lSurvival Contest &r&8>> &aLes points des teams ont été reinitialisé !"
+			if arg 1 is "set":
+				set {pts.%{team.%player%}%} to 510
+				send "&6&lSurvival Contest &r&8>> &aLes points de votre team ont été mis à %{pts.%{team.players}%}% "
+
+on death of an ender dragon:
+	add 100 to {pts.%{team.%attacker%}%}
+	if world is "world_the_end":
+		apply slowness 255 to all players for 60 seconds
+		teleport all players to location at {_x}, {_y}, {_z}
+		send "&6&lSurvival Contest &r&8>> &a L'équipe Bleu finit avec : %{pts.Bleu}% !" to all players
+		send "&6&lSurvival Contest &r&8>> &a L'équipe Rouge finit avec : %{pts.Rouge}% !" to all players
+		send "&6&lSurvival Contest &r&8>> &a L'équipe Jaune finit avec : %{pts.Jaune}% !" to all players
+		send "&6&lSurvival Contest &r&8>> &a L'équipe Vert finit avec : %{pts.Vert}% !" to all players
+		if {pts.Bleu} > {pts.Rouge}:
+			if {pts.Bleu} > {pts.Jaune}:
+				if {pts.Bleu} > {pts.Vert}:
+					send title "&1Victoire des Bleus" with subtitle "" to all players for 5 seconds
+					wait 10 seconds
+					make console execute command "/kill @a"
+		if {pts.Rouge} > {pts.Bleu}:
+			if {pts.Rouge} > {pts.Jaune}:
+				if {pts.Rouge} > {pts.Vert}:
+					send title "&4Victoire des Rouges" with subtitle "" to all players for 5 seconds
+					wait 10 seconds
+					make console execute command "/kill @a"
+		if {pts.Jaune} > {pts.Rouge}:
+			if {pts.Jaune} > {pts.Bleu}:
+				if {pts.Jaune} > {pts.Vert}:
+					send title "&eVictoire des Jaunes" with subtitle "" to all players for 5 seconds
+					wait 10 seconds
+					make console execute command "/kill @a"
+		if {pts.Vert} > {pts.Rouge}:
+			if {pts.Vert} > {pts.Jaune}:
+				if {pts.Vert} > {pts.Bleu}:
+					send title "&aVictoire des Verts" with subtitle "" to all players for 5 seconds
+					wait 10 seconds
+					make console execute command "/kill @a"
+
+                    
+on inventory click:
+	if name of event-inventory is "&6Survival Contest Team ":
+		if index of event-slot = 10:
+			cancel event
+			make player execute command "/team join Bleu"
+		if index of event-slot = 12:
+			cancel event
+			make player execute command "/team join Rouge"
+		if index of event-slot = 14:
+			cancel event
+			make player execute command "/team join Jaune"
+		if index of event-slot = 16:
+			cancel event
+			make player execute command "/team join Vert"
+on rightclick with sponge:
+	cancel event
+	set {_gui} to a new chest inventory with 3 row with name "&6Survival Contest Team "
+	set slot 10 of {_gui} to blue wool named "&1 Équipe Bleu" with lore "&5 Cliquez pour rejoindre l'équipe !" 
+	set slot 12 of {_gui} to red wool named "&4 Équipe Rouge" with lore "&5 Cliquez pour rejoindre l'équipe !"  
+	set slot 14 of {_gui} to yellow wool named "&e Équipe Jaune" with lore "&5 Cliquez pour rejoindre l'équipe !" 
+	set slot 16 of {_gui} to green wool named "&a Équipe Vert" with lore "&5 Cliquez pour rejoindre l'équipe !" 
+	open {_gui} to player
+    
+on join:
+	set join message to "&6&lSurvival Contest &r&8>> &a %player% à rejoint la partie !"
+	give player sponge named "&6Survival Contest"
+
+on leave:
+	set leave message to "&6&lSurvival Contest &r&8>> &a %player% à quitté la partie !"
+    
+
+    
