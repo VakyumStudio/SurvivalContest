@@ -59,13 +59,13 @@ on mine of deepslate redstone ore:
 	add 1 to {pts.%{team.%player%}%}
 	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 1 point à ta team !"
     
-#
+# Accès au portail
 
 on portal:
 	if {pts.%{team.%player%}%} < 500:
 		cancel event
         
-#
+# Lancement de la partie
 
 command /gamestart:
 	trigger:
@@ -81,7 +81,7 @@ command /gamestart:
 		teleport all players to location at {_x}, {_y}, {_z}
 		give all players 10 bread
         
-       
+# Système d'équipe       
     
 command /team [<string>] [<string>]:
 	trigger:
@@ -112,6 +112,8 @@ command /team [<string>] [<string>]:
 			if arg 1 is "set":
 				set {pts.%{team.%player%}%} to 510
 				send "&6&lSurvival Contest &r&8>> &aLes points de votre team ont été mis à %{pts.%{team.players}%}% "
+
+# EndGame
 
 on death of an ender dragon:
 	add 100 to {pts.%{team.%attacker%}%}
@@ -148,6 +150,8 @@ on death of an ender dragon:
 					make console execute command "/kill @a"
 
                     
+# Menu - Équipe
+
 on inventory click:
 	if name of event-inventory is "&6Survival Contest Team ":
 		if index of event-slot = 10:
@@ -171,6 +175,8 @@ on rightclick with sponge:
 	set slot 16 of {_gui} to green wool named "&a Équipe Vert" with lore "&5 Cliquez pour rejoindre l'équipe !" 
 	open {_gui} to player
     
+# Bonus Warden/Wither
+
 on death of wither:
 	add 75 to {pts.%{team.%attacker%}%}
 	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 75 points à ta team !"  to attacker
@@ -179,6 +185,8 @@ on death of warden:
 	add 50 to {pts.%{team.%attacker%}%}
 	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 50 points à ta team !" to attacker
     
+# Message d'arrivé/départ et éponge du menu
+
 on join:
 	set join message to "&6&lSurvival Contest &r&8>> &a %player% à rejoint la partie !"
 	give player sponge named "&6Survival Contest"
@@ -186,6 +194,8 @@ on join:
 on leave:
 	set leave message to "&6&lSurvival Contest &r&8>> &a %player% à quitté la partie !"
     
+# Malus pour la mort du joueur
+
 on death of player:
 	remove 10 from {pts.%{team.%victim%}%}
 	wait 4 ticks
