@@ -1,159 +1,290 @@
-on mine of diamond ore:
-	add 5 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 5 points à ta team !"
-    
-on mine of gold ore:
-	add 4 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 4 points à ta team !"  
-    
-on mine of iron ore:
-	add 3 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 3 points à ta team !"
-   
-on mine of coal ore:
-	add 2 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 2 points à ta team !"
-    
-on mine of ancient debris:
-	add 10 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 10 points à ta team !"
-
-on mine of emerald ore:
-	add 7 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 7 points à ta team !"
-    
-on mine of lapis ore:
-	add 1 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 1 point à ta team !"
-    
-on mine of redstone ore:
-	add 1 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 1 point à ta team !"
-    
-on mine of deepslate diamond ore:
-	add 5 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 5 points à ta team !"
-    
-on mine of deepslate gold ore:
-	add 4 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 4 points à ta team !" 
-    
-on mine of deepslate iron ore:
-	add 3 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 3 points à ta team !"
-   
-on mine of deepslate coal ore:
-	add 2 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as gagné 2 pts !"
-    
-
-on mine of deepslate emerald ore:
-	add 7 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 7 points à ta team !"
-    
-on mine of deepslate lapis ore:
-	add 1 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 1 point à ta team !"
-    
-on mine of deepslate redstone ore:
-	add 1 to {pts.%{team.%player%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 1 point à ta team !"
-    
-# Accès au portail
-
-on portal:
-	if {pts.%{team.%player%}%} < 500:
-		cancel event
+options:
+	server: Survival Contest
         
-# Lancement de la partie
-
-command /gamestart:
+#-----------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------Tablist-----------------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+        
+every second:
+	loop all players:
+		set loop-player's tab list header to "&6&l{@server} &r&8>> &aTimer : %{timer.h}%h : %{timer.m}%m : %{timer.s}%s"
+		set loop-player's tab list footer to "&6&l{@server} &r&8>> &aPoints de l'équipe : %{pts.%{team.%loop-player%}%}% &r&8>> &aKill Count : %{kill.%loop-player%}% &r&8>> &a Death Count : %{death.%loop-player%}% "
+        
+#-----------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------Commande principale-----------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+command /game [<string>]:
+	permission: *
 	trigger:
-		clear all players in world "world"'s inventory
-		clear all players in world "world_the_end"'s inventory
-		clear all players in world "world_nether"'s inventory
-		set {pts.%{team.all players}%} to 0
-		set all players in world "world"'s gamemode to survival
-		set {_x} to 0
-		set {_y} to 500
-		set {_z} to 0
-		apply resistance 255 to all players for 30 seconds
-		teleport all players to location at {_x}, {_y}, {_z}
-		give all players 10 bread
-        
-# Système d'équipe       
-    
+		if arg 1 is "start":
+			clear all players in world "world"'s inventory
+			clear all players in world "world_the_end"'s inventory
+			clear all players in world "world_nether"'s inventory
+			heal all players
+			make console execute command "/effect give @a saturation 10 255 true"
+			make console execute command "/xp set @a 0 levels"
+			loop all players:
+				set {kill.%loop-players%} to 0
+				set {death.%loop-players%} to 0
+				set {pts.%{team.%loop-players%}%} to 0
+			set all players in world "world"'s gamemode to survival
+			set {_x} to 0
+			set {_y} to 200
+			set {_z} to 0
+			send title "&e 5" with subtitle "" to all players for 1 seconds
+			make console execute command "/playsound minecraft:block.note_block.bell master @a 0 70 0 200"
+			wait 1 second
+			send title "&e 4" with subtitle "" to all players for 1 seconds
+			make console execute command "/playsound minecraft:block.note_block.bell master @a 0 70 0 200"
+			wait 1 second
+			send title "&e 3" with subtitle "" to all players for 1 seconds
+			make console execute command "/playsound minecraft:block.note_block.bell master @a 0 70 0 200"
+			wait 1 second
+			send title "&e 2" with subtitle "" to all players for 1 seconds
+			make console execute command "/playsound minecraft:block.note_block.bell master @a 0 70 0 200"
+			wait 1 second
+			send title "&e 1" with subtitle "" to all players for 1 seconds
+			make console execute command "/playsound minecraft:block.note_block.bell master @a 0 70 0 200"
+			wait 1 second
+			send title "&a Go!" with subtitle "&6Bonne Chance !" to all players for 1 seconds
+			make console execute command "/playsound minecraft:entity.villager.ambient master @a 0 70 0 200"
+			apply resistance 255 to all players for 30 seconds
+			teleport all players to location at {_x}, {_y}, {_z}
+			give all players 10 bread
+			make console execute command "/scoreboard objectives add Morts deathCount"
+			make console execute command "/scoreboard objectives setdisplay sidebar Morts "
+			make console execute command "/scoreboard objectives add health health"
+			make console execute command "/scoreboard objectives setdisplay list health "
+			set {state} to true
+			delete {firstP}
+			loop all players:
+				if {team.%loop-player%} is not set:
+					set loop-player's gamemode to spectator
+		if arg 1 is "stop":
+			if {state} is not set:
+				send "&6&l{@server} &r&8>> &a La partie n'a pas encore commencé !"
+			else:
+				send "&6&l{@server} &r&8>> &a Arret de la partie confirmé !"
+				clear all players in world "world"'s inventory
+				clear all players in world "world_the_end"'s inventory
+				clear all players in world "world_nether"'s inventory
+				make console execute command "/kill @a"
+				make console execute command "/scoreboard objectives remove Morts"
+				make console execute command "/scoreboard objectives remove health"
+				loop all players:
+					wait 4 ticks
+					set {kill.%loop-players%} to 0
+					set {death.%loop-players%} to 0
+					set {pts.%{team.%loop-players%}%} to 0
+				delete {state}
+            
 command /team [<string>] [<string>]:
 	trigger:
 		if arg 1 is not set:
-			send "&6&lSurvival Contest &r&8>> &aTu es dans l'équipe :%{team.%player%}%"
+			send "&6&l{@server} &r&8>> &aTu es dans l'équipe :%{team.%player%}%"
 		if arg 1 is "join":
 			if arg 2 is "Bleu":
 				set {team.%player%} to "Bleu"
-				send "&6&lSurvival Contest &r&8>> &1Vous avez rejoint les bleus !"
+				set player's game mode to survival
+				send "&6&l{@server} &r&8>> &aVous avez rejoint les &1bleus&a !"
+				make console execute command "/lp user %player%  parent set Bleu"
 			if arg 2 is "Rouge":
 				set {team.%player%} to "Rouge"
-				send "&6&lSurvival Contest &r&8>> &4Vous avez rejoint les rouges !"
+				set player's game mode to survival
+				send "&6&l{@server} &r&8>> &aVous avez rejoint les &4rouges&a !"
+				make console execute command "/lp user %player%  parent set Rouge"
 			if arg 2 is "Jaune":
 				set {team.%player%} to "Jaune"
-				send "&6&lSurvival Contest &r&8>> &eVous avez rejoint les jaunes !"
+				set player's game mode to survival
+				send "&6&l{@server} &r&8>> &aVous avez rejoint les &ejaunes &a!"
+				make console execute command "/lp user %player%  parent set Jaune"
 			if arg 2 is "Vert":
 				set {team.%player%} to "Vert"
-				send "&6&lSurvival Contest &r&8>> &aVous avez rejoint les verts !"
+				set player's game mode to survival
+				send "&6&l{@server} &r&8>> &aVous avez rejoint les verts !"
+				make console execute command "/lp user %player%  parent set Vert"
 		if arg 1 is "pts":
-			send "&6&lSurvival Contest &r&8>> &aTa team possède %{pts.%{team.%player%}%}% points !"
+			send "&6&l{@server} &r&8>> &aTa team possède %{pts.%{team.%player%}%}% points !"
 		player has permission "*":
 			if arg 1 is "reset":
 				set {pts.Bleu} to 0
 				set {pts.Rouge} to 0
 				set {pts.Vert} to 0
 				set {pts.Jaune} to 0
-				send "&6&lSurvival Contest &r&8>> &aLes points des teams ont été reinitialisé !"
-			if arg 1 is "set":
-				set {pts.%{team.%player%}%} to 510
-				send "&6&lSurvival Contest &r&8>> &aLes points de votre team ont été mis à %{pts.%{team.players}%}% "
+				send "&6&l{@server} &r&8>> &aLes points des teams ont été reinitialisé !"
 
-# EndGame
+#-----------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------Système de Lobby--------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+	
+on damage:
+	if {state} is not set:
+		if attacker doesn't have permission "*":
+			if victim is a player:
+				cancel event
+        
+on break:
+	if {state} is not set:
+		if player doesn't have permission "*":
+			cancel event
+			send "&6&l{@server} &r&8>> &a La partie n'a pas encore commencé !"
+        
+on place:
+	if {state} is not set:
+		if player doesn't have permission "*":
+			cancel event
+			send "&6&l{@server} &r&8>> &a La partie n'a pas encore commencé !"
+        
+on explode:
+	if {state} is not set:
+		cancel event
 
+#-----------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------Timer-------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+
+every 1 second:
+	if {state} is set:
+		add 1 to {timer.s}
+		if {timer.s} = 60:
+			add 1 to {timer.m}
+			set {timer.s} to 0
+			if {timer.m} = 60:
+				add 1 to {timer.h}
+				set {timer.m} to 0
+
+
+on skript start:
+	set {timer.m} to 0
+	set {timer.s} to 0
+	set {timer.h} to 0
+    
+#-----------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------Autorisation pour le nether---------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+            
+on portal:
+	if {pts.%{team.%player%}%} < 500:
+		send "&6&l{@server} &r&8>> &aTu as besoin de &c500 &apoints pour aller dans le nether et l'end!"
+		cancel event
+	else:
+		if {firstP} is not set:
+			add 10 to {pts.%{team.%player%}%}
+			send "&6&l{@server} &r&8>> &aTon équipe est la	première à rentrer dans le nether vous gagnez donc 10 points !"
+			set {firstP} to true
+    
+#-----------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------Système de victoire-----------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+    
 on death of an ender dragon:
 	add 100 to {pts.%{team.%attacker%}%}
 	if world is "world_the_end":
 		apply slowness 255 to all players for 60 seconds
 		teleport all players to location at {_x}, {_y}, {_z}
-		send "&6&lSurvival Contest &r&8>> &a L'équipe Bleu finit avec : %{pts.Bleu}% !" to all players
-		send "&6&lSurvival Contest &r&8>> &a L'équipe Rouge finit avec : %{pts.Rouge}% !" to all players
-		send "&6&lSurvival Contest &r&8>> &a L'équipe Jaune finit avec : %{pts.Jaune}% !" to all players
-		send "&6&lSurvival Contest &r&8>> &a L'équipe Vert finit avec : %{pts.Vert}% !" to all players
+		send "&6&l{@server} &r&8>> &a L'équipe Bleu finit avec : &c%{pts.Bleu}%&a !" to all players
+		send "&6&l{@server} &r&8>> &a L'équipe Rouge finit avec : &c%{pts.Rouge}%&a !" to all players
+		send "&6&l{@server} &r&8>> &a L'équipe Jaune finit avec : &c%{pts.Jaune}%&a !" to all players
+		send "&6&l{@server} &r&8>> &a L'équipe Vert finit avec : &c%{pts.Vert}%&a !" to all players
 		if {pts.Bleu} > {pts.Rouge}:
 			if {pts.Bleu} > {pts.Jaune}:
 				if {pts.Bleu} > {pts.Vert}:
 					send title "&1Victoire des Bleus" with subtitle "" to all players for 5 seconds
 					wait 10 seconds
 					make console execute command "/kill @a"
+					delete {state}
+					make console execute command "/scoreboard objectives remove Morts"
+					make console execute command "/scoreboard objectives remove health"
 		if {pts.Rouge} > {pts.Bleu}:
 			if {pts.Rouge} > {pts.Jaune}:
 				if {pts.Rouge} > {pts.Vert}:
 					send title "&4Victoire des Rouges" with subtitle "" to all players for 5 seconds
 					wait 10 seconds
 					make console execute command "/kill @a"
+					delete {state}
+					make console execute command "/scoreboard objectives remove Morts"
+					make console execute command "/scoreboard objectives remove health"
 		if {pts.Jaune} > {pts.Rouge}:
 			if {pts.Jaune} > {pts.Bleu}:
 				if {pts.Jaune} > {pts.Vert}:
 					send title "&eVictoire des Jaunes" with subtitle "" to all players for 5 seconds
 					wait 10 seconds
 					make console execute command "/kill @a"
+					delete {state}
+					make console execute command "/scoreboard objectives remove Morts"
+					make console execute command "/scoreboard objectives remove health"
 		if {pts.Vert} > {pts.Rouge}:
 			if {pts.Vert} > {pts.Jaune}:
 				if {pts.Vert} > {pts.Bleu}:
 					send title "&aVictoire des Verts" with subtitle "" to all players for 5 seconds
 					wait 10 seconds
 					make console execute command "/kill @a"
-
+					delete {state}
+					make console execute command "/scoreboard objectives remove Morts"
+					make console execute command "/scoreboard objectives remove health"
                     
-# Menu - Équipe
 
+    
+#-----------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------Rejoindre et quitter----------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+    
+on join:
+	set join message to "&6&l{@server} &r&8>> &a %player% à rejoint la partie !"
+	give player sponge named "&6{@server}"
+	console command "/attribute %player% minecraft:generic.attack_speed base set 9999"
+	if {state} is not set:
+		wait 4 ticks
+		send "&6&l{@server} &r&8>> &aPensez à choisir votre équipe sinon vous serez en tant que spectateur !"  to player
+		set {_x} to 0
+		set {_y} to 255
+		set {_z} to 0
+		teleport all players to location at {_x}, {_y}, {_z}
+		clear player's inventory
+		make console execute command "/fill 50 250 50 -50 250 -50 glass"
+		make console execute command "/setblock 5 250 0 minecraft:water"
+		make console execute command "/setblock -5 250 0 minecraft:water"
+		make console execute command "/setblock 0 250 5 minecraft:water"
+		make console execute command "/setblock 0 250 -5 minecraft:water"
+		make console execute command "/setblock 0 250 0 minecraft:glowstone"
+	else:
+		if {team.%player%} is not set:
+			set player's gamemode to spectator
+			wait 8 ticks
+			send "&6&l{@server} &r&8>> &aUne partie est en cours vous êtes donc en spectateur !"  to player
+			set {_x} to 0
+			set {_y} to 255
+			set {_z} to 0
+			teleport all players to location at {_x}, {_y}, {_z}
+
+on leave:
+	set leave message to "&6&l{@server} &r&8>> &a %player% à quitté la partie !"
+
+#-----------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------Système de Mort---------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+    
+on death of player:
+	if {state} is set:
+		remove 10 from {pts.%{team.%victim%}%}
+		wait 4 ticks
+		add 1 to {death.%victim%}
+		add 10 to {pts.%{team.%attacker%}%}
+		if attacker is a player:
+			add 1 to {kill.%attacker%}
+		send "&6&l{@server} &r&8>> &cTu as fait perdre 10 points à ta team !"  to victim
+		if {spec} is true:
+			make console execute command "/gamemode spectator %victim%"
+
+#-----------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------Menu de team------------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+                    
 on inventory click:
-	if name of event-inventory is "&6Survival Contest Team ":
+	if name of event-inventory is "&6{@server} Team ":
+		if index of event-slot = 8:
+			cancel event
+			make player execute command "/menuadmin"
 		if index of event-slot = 10:
 			cancel event
 			make player execute command "/team join Bleu"
@@ -166,39 +297,242 @@ on inventory click:
 		if index of event-slot = 16:
 			cancel event
 			make player execute command "/team join Vert"
+		if index of event-slot = 18:
+			cancel event
+			delete {team.%player%}
+			send "&6&l{@server} &r&8>> &aTu as rejoins les spectateurs !" 
+			make console execute command "/lp user %player%  parent remove Bleu"
+			make console execute command "/lp user %player%  parent remove Rouge"
+			make console execute command "/lp user %player%  parent remove Jaune"
+			make console execute command "/lp user %player%  parent remove Vert"
 on rightclick with sponge:
 	cancel event
-	set {_gui} to a new chest inventory with 3 row with name "&6Survival Contest Team "
+	set {_gui} to a new chest inventory with 3 row with name "&6{@server} Team "
+	set slot 8 of {_gui} to bedrock named "&l&3Paramètre" with lore "&5Hôte Uniquement!"
 	set slot 10 of {_gui} to blue wool named "&1 Équipe Bleu" with lore "&5 Cliquez pour rejoindre l'équipe !" 
 	set slot 12 of {_gui} to red wool named "&4 Équipe Rouge" with lore "&5 Cliquez pour rejoindre l'équipe !"  
 	set slot 14 of {_gui} to yellow wool named "&e Équipe Jaune" with lore "&5 Cliquez pour rejoindre l'équipe !" 
 	set slot 16 of {_gui} to green wool named "&a Équipe Vert" with lore "&5 Cliquez pour rejoindre l'équipe !" 
+	set slot 18 of {_gui} to barrier named "&a Spectateur" with lore "&5 Cliquez pour devenir spectateur !" 
 	open {_gui} to player
-    
-# Bonus Warden/Wither
 
+#-----------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------Menu settings-----------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+            
+on inventory click:
+	if name of event-inventory is "&6{@server} Settings ":
+		if index of event-slot = 3:
+			cancel event
+			if {spec} is true:
+				send "&6&l{@server} &r&8>> &aUne seule chance Désactiver !" to player
+				delete {spec} 
+			else if {spec} is not set:
+				send "&6&l{@server} &r&8>> &aUne seule chance Activer !" to player
+				set {spec} to true
+		if index of event-slot = 11:
+			cancel event
+			if {regen} is true:
+				make console execute command "/gamerule naturalRegeneration false"
+				send "&6&l{@server} &r&8>> &aRégénération Désactivé !"
+				delete {regen}
+			else if {regen} is not set:
+				make console execute command "/gamerule naturalRegeneration true"
+				send "&6&l{@server} &r&8>> &aRégénération Activé !"
+				set {regen} to true
+		if index of event-slot = 5:
+			cancel event
+			make console execute command "/difficulty hard"
+			send "&6&l{@server} &r&8>> &aLa difficulté a été mise en difficile !"
+		if index of event-slot = 13:
+			cancel event
+			make player execute command "/game start"
+		if index of event-slot = 15:
+			cancel event
+			make player execute command "/team reset"
+            
+command /menuadmin:
+	permission: *
+	trigger:
+		set {_gui} to a new chest inventory with 3 row with name "&6{@server} Settings "
+		set slot 3 of {_gui} to skeleton skull named "&aUne seul vie" with lore "&5 Cliquez pour ne laisser qu'une seule chance aux joueurs !"
+		set slot 5 of {_gui} to cobweb named "&aDifficulté" with lore "&5 Cliquer pour passer en difficile !"
+		set slot 11 of {_gui} to golden apple named "&aHardcore Mode" with lore "&5 Cliquez pour mettre en mode hardcore"
+		set slot 13 of {_gui} to diamond ore named "&a Lancer la partie !" with lore "&5 Cliquez pour lancer la partie !"
+		set slot 15 of {_gui} to barrier named "&aReinitialiser les teams !" with lore "&5 Cliquez pour reinitialiser les scores !"
+		open {_gui} to player
+        
+#-----------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------Menu Shop--------------------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+ 
+command /shop:
+	trigger:
+		set {_gui} to a new chest inventory with 3 row with name "&6{@server} Shop "
+		set slot 2 of {_gui} to bread named "&a Pain" with lore "&5 5 points pour 2 pains !"
+		set slot 6 of {_gui} to spectral arrow named "&a Flèche spéctrale" with lore "&5 10 points pour 5 flèches spectrale !"
+		set slot 10 of {_gui} to sugar cane named "&a Canne à sucre" with lore "&5 10 points pour 1 cânne à sucre !"
+		set slot 12 of {_gui} to book named "&aLivres" with lore "&5Coute 50 points pour 2 livres !"
+		set slot 14 of {_gui} to blaze rod named "&aBatons de blaze" with lore "&5 25 points pour 1 batons de blaze !"
+		set slot 16 of {_gui} to experience bottle named "&aBouteille d'xp" with lore "&5 25 points pour 5 bouteilles d'xp !"
+		set slot 22 of {_gui} to ender pearl named "&aPerle" with lore "&5 25 points pour 1 ender pearl !"
+		open {_gui} to player
+        
+on inventory click:
+	if name of event-inventory is "&6{@server} Shop ":
+		if index of event-slot = 2:
+			cancel event
+			if {pts.%{team.%player%}%} < 5:
+				send "&6&l{@server} &r&8>> &cVous n'avez pas assez de points ! "
+			else:
+				give player 2 bread
+				remove 5 from {pts.%{team.%player%}%}
+				send "&6&l{@server} &r&8>> &a Voici 2 pains en échange de 5 points ayant été crédité dans votre compte d'équipe !"
+		if index of event-slot = 6:
+			cancel event
+			if {pts.%{team.%player%}%} < 10:
+				send "&6&l{@server} &r&8>> &cVous n'avez pas assez de points ! "
+			else:
+				give player 5 spectral arrow
+				remove 10 from {pts.%{team.%player%}%}
+				send "&6&l{@server} &r&8>> &a Voici 5 flèches spectrales en échange de 10 points ayant été crédité dans votre compte d'équipe !"
+		if index of event-slot = 10:
+			cancel event
+			if {pts.%{team.%player%}%} < 10:
+				send "&6&l{@server} &r&8>> &cVous n'avez pas assez de points !"
+			else:
+				give player  1 sugar cane
+				remove 10 from {pts.%{team.%player%}%}
+				send "&6&l{@server} &r&8>> &a Voici une canne à sucre en échange de 10 points ayant été crédité dans votre compte d'équipe !"
+		if index of event-slot = 12:
+			cancel event
+			if {pts.%{team.%player%}%} < 50:
+				send "&6&l{@server} &r&8>> &cVous n'avez pas assez de points !"
+			else:
+				give player 2 book
+				remove 50 from {pts.%{team.%player%}%}
+				send "&6&l{@server} &r&8>> &a Voici 2 livres en échange de 50 points ayant été crédité dans votre compte d'équipe !"
+		if index of event-slot = 14:
+			cancel event
+			if {pts.%{team.%player%}%} < 25:
+				send "&6&l{@server} &r&8>> &cVous n'avez pas assez de points !"
+			else:
+				give player 1 blaze rod
+				remove 25 from {pts.%{team.%player%}%}
+				send "&6&l{@server} &r&8>> &a Voici 1 baton de blaze en échange de 25 points ayant été crédité dans votre compte d'équipe !"
+		if index of event-slot = 16:
+			cancel event
+			if {pts.%{team.%player%}%} < 25:
+				send "&6&l{@server} &r&8>> &cVous n'avez pas assez de points !"
+			else:
+				give player 5 experience bottle
+				remove 25 from {pts.%{team.%player%}%}
+				send "&6&l{@server} &r&8>> &a Voici 5 bouteilles d'xp en échange de 25 points ayant été crédité dans votre compte d'équipe !"
+		if index of event-slot = 22:
+			cancel event
+			if {pts.%{team.%player%}%} < 25:
+				send "&6&l{@server} &r&8>> &cVous n'avez pas assez de points !"
+			else:
+				give player 1 ender pearl
+				remove 25 from {pts.%{team.%player%}%}
+				send "&6&l{@server} &r&8>> &a Voici 1 ender pearl en échange de 25 points ayant été crédité dans votre compte d'équipe !"
+            
+#-----------------------------------------------------------------------------------------------------------------------------#
+#----------------------------------------------Système de point---------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+
+on mine of diamond ore:
+	if {state} is set:
+		add 5 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 5 points à ta team !"
+    
+on mine of gold ore:
+	if {state} is set:
+		add 4 to {pts.%{team.%player%}%}
+		send "&6&l{@server}t &r&8>> &aTu as rapporté 4 points à ta team !"  
+    
+on mine of iron ore:
+	if {state} is set:
+		add 3 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 3 points à ta team !"
+   
+on mine of coal ore:
+	if {state} is set:
+		add 2 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 2 points à ta team !"
+    
+on mine of ancient debris:
+	if {state} is set:
+		add 10 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 10 points à ta team !"
+		cancel drops
+		give 1 netherite scrap to player
+
+on mine of emerald ore:
+	if {state} is set:
+		add 7 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 7 points à ta team !"
+    
+on mine of lapis ore:
+	if {state} is set:
+		add 1 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 1 point à ta team !"
+    
+on mine of redstone ore:
+	if {state} is set:
+		add 1 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 1 point à ta team !"
+    
+on mine of quartz ore:
+	if {state} is set:
+		add 2 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 1 point à ta team !"
+    
+on mine of deepslate diamond ore:
+	if {state} is set:
+		add 5 to {pts.%{team.%player%}%}
+		send "&6&l{@server}t &r&8>> &aTu as rapporté 5 points à ta team !"
+    
+on mine of deepslate gold ore:
+	if {state} is set:
+		add 4 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 4 points à ta team !" 
+    
+on mine of deepslate iron ore:
+	if {state} is set:
+		add 3 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 3 points à ta team !"
+   
+on mine of deepslate coal ore:
+	if {state} is set:
+		add 2 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as gagné 2 pts !"
+    
+
+on mine of deepslate emerald ore:
+	if {state} is set:
+		add 7 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 7 points à ta team !"
+    
+on mine of deepslate lapis ore:
+	if {state} is set:
+		add 1 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 1 point à ta team !"
+    
+on mine of deepslate redstone ore:
+	if {state} is set:
+		add 1 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 1 point à ta team !"
+        
 on death of wither:
 	add 75 to {pts.%{team.%attacker%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 75 points à ta team !"  to attacker
+	send "&6&l{@server} &r&8>> &aTu as rapporté 75 points à ta team !"  to attacker
     
 on death of warden:
 	add 50 to {pts.%{team.%attacker%}%}
-	send "&6&lSurvival Contest &r&8>> &aTu as rapporté 50 points à ta team !" to attacker
+	send "&6&l{@server} &r&8>> &aTu as rapporté 50 points à ta team !" to attacker
     
-# Message d'arrivé/départ et éponge du menu
-
-on join:
-	set join message to "&6&lSurvival Contest &r&8>> &a %player% à rejoint la partie !"
-	give player sponge named "&6Survival Contest"
-
-on leave:
-	set leave message to "&6&lSurvival Contest &r&8>> &a %player% à quitté la partie !"
-    
-# Malus pour la mort du joueur
-
-on death of player:
-	remove 10 from {pts.%{team.%victim%}%}
-	wait 4 ticks
-	send "&6&lSurvival Contest &r&8>> &cTu as fait perdre 10 points à ta team !"  to victim
-
-    
+command /pts [<player>]:
+	permission: *
+	trigger:
+		add 100 to {pts.%{team.%arg 1%}%}
