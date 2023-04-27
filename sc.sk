@@ -50,7 +50,18 @@ command /game [<string>]:
 			make console execute command "/playsound minecraft:entity.villager.ambient master @a 0 70 0 200"
 			apply resistance 255 to all players for 30 seconds
 			teleport all players to location at {_x}, {_y}, {_z}
+			if {fast} is set:
+				set helmet of all players to iron helmet
+				set chestplate of all players to iron chestplate
+				set leggings of all players to iron leggings
+				set boots of all players to iron boots
+				give 1 iron sword to all players
+				give 1 iron pickaxe to all players
+				give 1 iron axe to all players
+				give 1 water bucket to all players
+				give 64 oak log to all players
 			give all players 10 bread
+			set slot 8 of player's inventory to clock named "&6&l{@server} Shop" with lore "&5 Permet d'accéder a la boutique !"
 			make console execute command "/scoreboard objectives add Morts deathCount"
 			make console execute command "/scoreboard objectives setdisplay sidebar Morts "
 			make console execute command "/scoreboard objectives add health health"
@@ -69,6 +80,7 @@ command /game [<string>]:
 				clear all players in world "world_the_end"'s inventory
 				clear all players in world "world_nether"'s inventory
 				make console execute command "/kill @a"
+				set all players in world "world"'s gamemode to survival
 				make console execute command "/scoreboard objectives remove Morts"
 				make console execute command "/scoreboard objectives remove health"
 				loop all players:
@@ -77,6 +89,13 @@ command /game [<string>]:
 					set {death.%loop-players%} to 0
 					set {pts.%{team.%loop-players%}%} to 0
 				delete {state}
+				give all players sponge named "&6{@server}"
+				loop all players:
+					delete {team.%loop-player%}
+					set {_x} to 0
+					set {_y} to 255
+					set {_z} to 0
+					teleport all players to location at {_x}, {_y}, {_z}
             
 command /team [<string>] [<string>]:
 	trigger:
@@ -112,6 +131,80 @@ command /team [<string>] [<string>]:
 				set {pts.Vert} to 0
 				set {pts.Jaune} to 0
 				send "&6&l{@server} &r&8>> &aLes points des teams ont été reinitialisé !"
+
+#-----------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------Menu de règles----------------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+
+on rightclick with written book:
+	cancel event
+	set {_gui} to a new chest inventory with 3 row with name "&6{@server} Rules "
+	set slot 0 of {_gui} to ancient debris named "&l&aMinerais de Netherite" with lore "&5Rapporte 10 points!"
+	set slot 1 of {_gui} to diamond ore named "&l&aMinerais de Diamant" with lore "&5Rapporte 5 points!"
+	set slot 2 of {_gui} to gold ore named "&l&aMinerais de Or" with lore "&5Rapporte 4 points!"
+	set slot 3 of {_gui} to iron ore named "&l&aMinerais de Fer" with lore "&5Rapporte 3 points!"
+	set slot 4 of {_gui} to redstone ore named "&l&aMinerais de Redstone" with lore "&5Rapporte 1 points!"
+	set slot 5 of {_gui} to lapis lazuli ore named "&l&aMinerais de Lapis" with lore "&5Rapporte 1 point!"
+	set slot 6 of {_gui} to coal ore named "&l&aMinerais de Charbon" with lore "&5Rapporte 2 points!"
+	set slot 7 of {_gui} to quartz ore named "&l&aMinerais de Quartz" with lore "&5Rapporte 2 points!"
+	set slot 8 of {_gui} to emerald ore named "&l&aMinerais d'Emeraude" with lore "&5Rapporte 7 points!"
+	set slot 21 of {_gui} to flint and steel named "&l&aNether" with lore "&5Accèssible à partir de 500 points!"
+	set slot 23 of {_gui} to end portal frame named "&l&aEnd" with lore "&5Accèssible à partir de 500 points!"
+	open {_gui} to player
+    
+on inventory click:
+	if name of event-inventory is "&6{@server} Rules ":
+		if index of event-slot = 0:
+			cancel event
+		if index of event-slot = 1:
+			cancel event
+		if index of event-slot = 2:
+			cancel event
+		if index of event-slot = 3:
+			cancel event
+		if index of event-slot = 4:
+			cancel event
+		if index of event-slot = 5:
+			cancel event
+		if index of event-slot = 6:
+			cancel event
+		if index of event-slot = 7:
+			cancel event
+		if index of event-slot = 8:
+			cancel event
+		if index of event-slot = 21:
+			cancel event
+		if index of event-slot = 23:
+			cancel event
+
+#-----------------------------------------------------------------------------------------------------------------------------#
+#-----------------------------------------------Chat de team et global--------------------------------------------------------#
+#-----------------------------------------------------------------------------------------------------------------------------#
+
+on chat:
+	cancel event
+	if {team.%player%} is set:
+		if first character of message is "!":
+			if {team.%player%} is "Bleu":
+				send "&1%{team.%player%}% &l[Global] &r&1%player% &7> &2!&f%subtext of message from characters 2 to (the length of message)%" to all players
+			if {team.%player%} is "Rouge":
+				send "&4%{team.%player%}% &l[Global] &r&4%player% &7> &2!&f%subtext of message from characters 2 to (the length of message)%" to all players
+			if {team.%player%} is "Jaune":
+				send "&e%{team.%player%}% &l[Global] &r&e%player% &7> &2!&f%subtext of message from characters 2 to (the length of message)%" to all players
+			if {team.%player%} is "Vert":
+				send "&a%{team.%player%}% &l[Global] &r&a%player% &7> &2!&f%subtext of message from characters 2 to (the length of message)%" to all players
+		else:
+			loop all players:
+				if {team.%loop-player%} is "Bleu":
+					send "&1%{team.%player%}% &l[Privé] &r&1%player% &7> &f%message%" to loop-player
+				if {team.%loop-player%} is "Rouge":
+					send "&4%{team.%player%}% &l[Privé] &r&4%player% &7> &f%message%" to loop-player
+				if {team.%loop-player%} is "Jaune":
+					send "&e%{team.%player%}% &l[Privé] &r&e%player% &7> &f%message%" to loop-player
+				if {team.%loop-player%} is "Vert":
+					send "&a%{team.%player%}% &l[Privé] &r&a%player% &7> &f&f%message%" to loop-player
+	else:
+		send "&7[Spectateur] &r%player% &7> &f%message%" to all players
 
 #-----------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------Système de Lobby--------------------------------------------------------------#
@@ -231,7 +324,6 @@ on death of an ender dragon:
     
 on join:
 	set join message to "&6&l{@server} &r&8>> &a %player% à rejoint la partie !"
-	give player sponge named "&6{@server}"
 	console command "/attribute %player% minecraft:generic.attack_speed base set 9999"
 	if {state} is not set:
 		wait 4 ticks
@@ -256,6 +348,8 @@ on join:
 			set {_y} to 255
 			set {_z} to 0
 			teleport all players to location at {_x}, {_y}, {_z}
+	give player sponge named "&6{@server}"
+	set slot 8 of player's inventory to written book named "&6&l{@server} Rules" with lore "&5Voici les règles du jeux !"
 
 on leave:
 	set leave message to "&6&l{@server} &r&8>> &a %player% à quitté la partie !"
@@ -350,22 +444,33 @@ on inventory click:
 		if index of event-slot = 15:
 			cancel event
 			make player execute command "/team reset"
+		if index of event-slot = 21:
+			cancel event
+			if {fast} is not set:
+				set {fast} to true
+				send "&6&l{@server} &r&8>> &aLe mode partie rapide est activé !"
+			else:
+				delete {fast}
+				send "&6&l{@server} &r&8>> &aLe mode partie rapide est désactivé !"
             
 command /menuadmin:
 	permission: *
 	trigger:
 		set {_gui} to a new chest inventory with 3 row with name "&6{@server} Settings "
-		set slot 3 of {_gui} to skeleton skull named "&aUne seul vie" with lore "&5 Cliquez pour ne laisser qu'une seule chance aux joueurs !"
+		set slot 3 of {_gui} to skeleton skull named "&aUne seul vie !" with lore "&5 Cliquez pour ne laisser qu'une seule chance aux joueurs !"
 		set slot 5 of {_gui} to cobweb named "&aDifficulté" with lore "&5 Cliquer pour passer en difficile !"
-		set slot 11 of {_gui} to golden apple named "&aHardcore Mode" with lore "&5 Cliquez pour mettre en mode hardcore"
+		set slot 11 of {_gui} to golden apple named "&aHardcore Mode !" with lore "&5 Cliquez pour mettre en mode hardcore"
 		set slot 13 of {_gui} to diamond ore named "&a Lancer la partie !" with lore "&5 Cliquez pour lancer la partie !"
 		set slot 15 of {_gui} to barrier named "&aReinitialiser les teams !" with lore "&5 Cliquez pour reinitialiser les scores !"
+		set slot 21 of {_gui} to awkward potion named "&aPartie rapide !" with lore "&5 Cliquez pour faire une partie rapide !"
 		open {_gui} to player
         
 #-----------------------------------------------------------------------------------------------------------------------------#
 #-----------------------------------------------Menu Shop--------------------------------------------------------------------------#
 #-----------------------------------------------------------------------------------------------------------------------------#
- 
+on rightclick with clock:
+	make player execute command "/shop"
+
 command /shop:
 	trigger:
 		set {_gui} to a new chest inventory with 3 row with name "&6{@server} Shop "
@@ -486,7 +591,7 @@ on mine of redstone ore:
 on mine of quartz ore:
 	if {state} is set:
 		add 2 to {pts.%{team.%player%}%}
-		send "&6&l{@server} &r&8>> &aTu as rapporté 1 point à ta team !"
+		send "&6&l{@server} &r&8>> &aTu as rapporté 2 point à ta team !"
     
 on mine of deepslate diamond ore:
 	if {state} is set:
@@ -523,6 +628,11 @@ on mine of deepslate redstone ore:
 	if {state} is set:
 		add 1 to {pts.%{team.%player%}%}
 		send "&6&l{@server} &r&8>> &aTu as rapporté 1 point à ta team !"
+        
+on mine of nether gold ore:
+	if {state} is set:
+		add 2 to {pts.%{team.%player%}%}
+		send "&6&l{@server} &r&8>> &aTu as rapporté 2 points à ta team !"
         
 on death of wither:
 	add 75 to {pts.%{team.%attacker%}%}
