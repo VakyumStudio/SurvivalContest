@@ -161,8 +161,11 @@ on rightclick with written book:
 	set slot 6 of {_gui} to coal ore named "&l&aMinerais de Charbon" with lore "&5Rapporte 2 points!"
 	set slot 7 of {_gui} to quartz ore named "&l&aMinerais de Quartz" with lore "&5Rapporte 2 points!"
 	set slot 8 of {_gui} to emerald ore named "&l&aMinerais d'Emeraude" with lore "&5Rapporte 7 points!"
-	set slot 21 of {_gui} to flint and steel named "&l&aNether" with lore "&5Accèssible à partir de 500 points!"
-	set slot 23 of {_gui} to end portal frame named "&l&aEnd" with lore "&5Accèssible à partir de 500 points!"
+	set slot 18 of {_gui} to skeleton skull named "&aUne seul vie !" with lore "&5 %{spec}%"
+	set slot 20 of {_gui} to golden apple named "&aHardcore Mode !" with lore "&5 %{regen}%"
+	set slot 22 of {_gui} to awkward potion named "&aPartie rapide !" with lore "&5 %{fast}%"
+	set slot 24 of {_gui} to flint and steel named "&l&aNether" with lore "&5Accèssible à partir de 500 points!"
+	set slot 26 of {_gui} to end portal frame named "&l&aEnd" with lore "&5Accèssible à partir de 500 points!"
 	open {_gui} to player
     
 on inventory click:
@@ -185,9 +188,17 @@ on inventory click:
 			cancel event
 		if index of event-slot = 8:
 			cancel event
-		if index of event-slot = 21:
+		if index of event-slot = 18:
 			cancel event
-		if index of event-slot = 23:
+		if index of event-slot = 20:
+			cancel event
+		if index of event-slot = 22:
+			cancel event
+		if index of event-slot = 24:
+			cancel event
+		if index of event-slot = 24:
+			cancel event
+		if index of event-slot = 26:
 			cancel event
 
 #-----------------------------------------------------------------------------------------------------------------------------#
@@ -432,22 +443,22 @@ on inventory click:
 	if name of event-inventory is "&6{@server} Settings ":
 		if index of event-slot = 3:
 			cancel event
-			if {spec} is true:
+			if {spec} is set:
 				send "&6&l{@server} &r&8>> &aUne seule chance Désactiver !" to player
 				delete {spec} 
-			else if {spec} is not set:
+			else:
 				send "&6&l{@server} &r&8>> &aUne seule chance Activer !" to player
-				set {spec} to true
+				set {spec} to "Activé"
 		if index of event-slot = 11:
 			cancel event
-			if {regen} is true:
-				make console execute command "/gamerule naturalRegeneration false"
-				send "&6&l{@server} &r&8>> &aRégénération Désactivé !"
-				delete {regen}
-			else if {regen} is not set:
+			if {regen} is set:
 				make console execute command "/gamerule naturalRegeneration true"
 				send "&6&l{@server} &r&8>> &aRégénération Activé !"
-				set {regen} to true
+				delete {regen}
+			else if {regen} is not set:
+				make console execute command "/gamerule naturalRegeneration false"
+				send "&6&l{@server} &r&8>> &aRégénération Désactivé !"
+				set {regen} to "Activé"
 		if index of event-slot = 5:
 			cancel event
 			make console execute command "/difficulty hard"
@@ -461,7 +472,7 @@ on inventory click:
 		if index of event-slot = 21:
 			cancel event
 			if {fast} is not set:
-				set {fast} to true
+				set {fast} to "Activé"
 				send "&6&l{@server} &r&8>> &aLe mode partie rapide est activé !"
 			else:
 				delete {fast}
