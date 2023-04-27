@@ -96,6 +96,19 @@ command /game [<string>]:
 					set {_y} to 255
 					set {_z} to 0
 					teleport all players to location at {_x}, {_y}, {_z}
+		if arg 1 is "pause":
+			if {pause} is not set:
+				send "&6&l{@server} &r&8>> &a Partie mise en pause !" to all players
+				apply slowness 255 to all players for 999999 seconds
+				apply resistance 255 to all players for 999999 seconds
+				apply jump boost 255 to all players for 999999 seconds
+				apply mining fatigue 255 to all players for 999999 seconds
+				apply weakness 255 to all players for 999999 seconds
+				set {pause} to true
+			else:
+				make console execute command "/effect clear @a"
+				send "&6&l{@server} &r&8>> &a Partie reprise !" to all players
+				delete {pause}
             
 command /team [<string>] [<string>]:
 	trigger:
@@ -238,13 +251,14 @@ on explode:
 
 every 1 second:
 	if {state} is set:
-		add 1 to {timer.s}
-		if {timer.s} = 60:
-			add 1 to {timer.m}
-			set {timer.s} to 0
-			if {timer.m} = 60:
-				add 1 to {timer.h}
-				set {timer.m} to 0
+		if {pause} is not set:
+			add 1 to {timer.s}
+			if {timer.s} = 60:
+				add 1 to {timer.m}
+				set {timer.s} to 0
+				if {timer.m} = 60:
+					add 1 to {timer.h}
+					set {timer.m} to 0
 
 
 on skript start:
